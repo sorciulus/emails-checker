@@ -1,0 +1,30 @@
+{
+    "name": "sorciulus/email-checker",
+    "type": "library",
+    "description": "PHP email validator using SMTP",
+    "keywords": ["php", "email", "smtp", "checker"],    
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Corrado Ronci",
+            "email": "sorciulus@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.6",          
+        "miyahan/telnet": "^1.1"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "sorciulus\\EmailChecker\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "sorciulus\\EmailChecker\\Tests\\": "tests/"
+        }
+    }
+}
