@@ -76,7 +76,7 @@ class ResponseChecker
     *
     * @return boolean
     */
-    public function IsValid()
+    public function isValid()
     {
         return $this->isValid;
     } 

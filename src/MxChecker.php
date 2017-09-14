@@ -32,11 +32,10 @@ class MxChecker implements MxInterface
 	 */
 	function __construct($domain)
 	{
-		if (function_exists("dns_get_record")) {						
-			$this->recordMx = @dns_get_record($domain, DNS_MX);
-		} else {
-            throw new MxFunctionException("dns_get_record() has been disabled for security reasons. Try to enable.");              
+		if (!function_exists("dns_get_record")) {						
+			throw new MxFunctionException("dns_get_record() has been disabled for security reasons. Try to enable.");              
 		}
+		$this->recordMx = @dns_get_record($domain, DNS_MX);
 	}
 
 	/**
@@ -48,12 +47,11 @@ class MxChecker implements MxInterface
 	 */
 	public function getRecordMx()
 	{
-        if(!empty($this->recordMx)){
-        	$this->sortRecordByPriority();        	
-        	return $this->recordMx;
-        } else {
-        	throw new MxCheckerException("Record Mx not found");        	
+        if(empty($this->recordMx)){
+        	throw new MxCheckerException("Record Mx not found");
         }
+        $this->sortRecordByPriority();        	
+        return $this->recordMx;
 	}
 
 	/**
@@ -64,7 +62,7 @@ class MxChecker implements MxInterface
 	private function sortRecordByPriority()
 	{
 		$pri = [];
-		foreach ($this->recordMx as $key => $value) {
+		foreach ($this->recordMx as $value) {
 			$pri[] = $value["pri"];
 		}
 		array_multisort($pri, SORT_ASC, $this->recordMx);

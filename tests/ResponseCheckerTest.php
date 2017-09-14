@@ -48,7 +48,7 @@ class ResponseCheckerTest extends TestCase
     {
         $this->responseChecker->setIsValid(true);
 
-        $this->assertTrue($this->responseChecker->IsValid());
+        $this->assertTrue($this->responseChecker->isValid());
     }
 
     public function testSetMessageAssertTrue()

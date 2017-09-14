@@ -127,11 +127,11 @@ class SmtpChecker implements SmtpInterface
     */
     private function setSender($sender)
     {
-        if (filter_var($sender, FILTER_VALIDATE_EMAIL)) {
-			$this->sender = $sender;				
-		} else {
+        if (!filter_var($sender, FILTER_VALIDATE_EMAIL)) {
 			throw new SmtpCheckerException("Email Sender not valid");		
-		}        		
+		}
+		$this->sender = $sender;				
+		       		
     }
 
 	/**
@@ -240,11 +240,10 @@ class SmtpChecker implements SmtpInterface
 				$status[] = current($match);
 			}
 		}
-		if(!empty($status)) {			
-			return $status;
-		} else {
+		if(empty($status)) {			
 			throw new SmtpCheckerException("SMTP Status request Unknown, ". $output, $this->getDebug());			
 		}
+		return $status;
 	}
 
 
@@ -275,13 +274,12 @@ class SmtpChecker implements SmtpInterface
 			$exec = $this->client->exec($command);
 			$this->debug[] = $command;			
 			$status = $this->getResponseStatus($exec);										
+			$this->disconnect();
 			$this->code = end($status);
+			$this->isValid = false;
 			if (in_array($this->getCode(), [self::SMTP_USER_NOT_LOCAL, self::SMTP_GENERIC_SUCCESS])) {
 				$this->isValid = true;
-			} else {
-				$this->isValid = false;
-			}
-			$this->disconnect();
+			} 
 			return $this;			
 		}catch (\Exception $ex) {						
 			throw new SmtpCheckerException("Error Processing Request Validate : ".$ex->getMessage(), $this->getDebug());

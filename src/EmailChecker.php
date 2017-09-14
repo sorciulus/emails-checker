@@ -96,14 +96,6 @@ class EmailChecker
 	}
 
 	/**
-	 * Clear Mx Instance
-	 */
-	private function clearMx()
-	{
-		$this->mx = null;
-	}
-
-	/**
 	 * Extract domain from set Email
 	 * 
 	 * @return string $domain The domain extract from set Email
