@@ -55,7 +55,7 @@ class SmtpChecker implements SmtpInterface
 	 * The sender of SMTP check email
 	 * @var string
 	 */
-	private $sender;
+	private $sender = "no-replay@email.com";
 
 	// some smtp response codes
     const SMTP_CONNECT_SUCCESS = 220;
@@ -96,7 +96,7 @@ class SmtpChecker implements SmtpInterface
      *
      * @throws SmtpCheckerException when all domain not valid
      */
-	function __construct(MxInterface $domains, $sender = "no-replay@email.com", int $timeout = 10)
+	function __construct(MxInterface $domains, $sender = "", int $timeout = 10)
 	{						
 		foreach ($domains->getRecordMx() as $domain) {
 			try {				
@@ -110,7 +110,8 @@ class SmtpChecker implements SmtpInterface
 		}
 		if (empty($this->getDomain())) {
 			throw new SmtpCheckerException("Error Processing Request ".$ex->getMessage());			
-		}
+		}		
+				
 		if (!empty($sender)) {
 			$this->setSender($sender);
 		}
