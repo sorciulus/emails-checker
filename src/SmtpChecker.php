@@ -55,7 +55,7 @@ class SmtpChecker implements SmtpInterface
 	 * The sender of SMTP check email
 	 * @var string
 	 */
-	private $sender = "no-replay@email.com";
+	private $sender;
 
 	// some smtp response codes
     const SMTP_CONNECT_SUCCESS = 220;
@@ -96,7 +96,7 @@ class SmtpChecker implements SmtpInterface
      *
      * @throws SmtpCheckerException when all domain not valid
      */
-	function __construct(MxInterface $domains, $sender = false, int $timeout = 10)
+	function __construct(MxInterface $domains, $sender = "no-replay@email.com", int $timeout = 10)
 	{						
 		foreach ($domains->getRecordMx() as $domain) {
 			try {				
@@ -175,10 +175,7 @@ class SmtpChecker implements SmtpInterface
 	{
 		$host = $this->getDomainObj()->host;
 		try{				
-			$command = sprintf("HELO %s", $host);
-			$exec = $this->client->exec($command);	
-			$this->debug[] = $command;
-			$status = $this->getResponseStatus($exec);				
+			$status = $this->commandExec(sprintf("HELO %s", $host));				
 			if (!in_array(self::SMTP_GENERIC_SUCCESS, $status)) {
 				$this->disconnect();
 				throw new SmtpCheckerException("SMTP Status unexpected: ".implode(",", $status), $this->getDebug());	 
@@ -199,10 +196,7 @@ class SmtpChecker implements SmtpInterface
 	private function setFrom()
 	{		
 		try{
-			$command = sprintf("MAIL FROM:<%s>", $this->getSender());				
-			$exec = $this->client->exec($command);	
-			$this->debug[] = $command;	
-			$status = $this->getResponseStatus($exec);				
+			$status = $this->commandExec(sprintf("MAIL FROM:<%s>", $this->getSender()));				
 			if (!in_array(self::SMTP_GENERIC_SUCCESS, $status)) {
 				$this->disconnect();
 				throw new SmtpCheckerException("SMTP Status unexpected: ".implode(",", $status), $this->getDebug());	 
@@ -211,6 +205,19 @@ class SmtpChecker implements SmtpInterface
 			throw new SmtpCheckerException("Error Processing Request setFrom : ".$ex->getMessage(), $this->getDebug());
 		}
 		
+	}
+
+	/**
+	 * Wrapper to Telnet Client to Execute SMTP command, will return the status code
+	 * 
+	 * @param  string $command   command execute
+	 * @return array  SMPT status
+	 */
+	private function commandExec($command)
+	{		
+		$this->debug[] = $command;	
+		$exec = $this->client->exec($command);	
+		return $this->getResponseStatus($exec);		
 	}
 
 	/**

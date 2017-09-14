@@ -46,7 +46,7 @@ class EmailChecker
 	 * @param string $email The email address to check
 	 * @param string $sender The email address to set for sender
 	 */
-	function __construct($email = false, $sender = false)
+	function __construct($email = "", $sender = "")
 	{
 		if (!empty($email)) {
 			$this->setEmail($email);
@@ -66,11 +66,10 @@ class EmailChecker
 	public function setEmail($email)
 	{		
 		$this->clearEmail();
-		if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
-			$this->email = $email;	
-		} else {
-			throw new EmailCheckerException("Email not valid");		
+		if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+			throw new EmailCheckerException("Email not valid");
 		}
+		$this->email = $email;	
 	}
 
 	/**
@@ -82,11 +81,10 @@ class EmailChecker
 	 */
 	public function setSender($sender)
 	{
-		if (filter_var($sender, FILTER_VALIDATE_EMAIL)) {
-			$this->sender = $sender;	
-		} else {
-			throw new EmailCheckerException("Sender not valid");		
+		if (!filter_var($sender, FILTER_VALIDATE_EMAIL)) {
+			throw new EmailCheckerException("Sender not valid");				
 		}
+		$this->sender = $sender;	
 	}
 
 	/**
@@ -114,12 +112,11 @@ class EmailChecker
 	 */
 	public function getDomain()
 	{
-		if (!empty($this->getEmail())) {
-			$domain = explode("@", $this->getEmail());				
-			return end($domain);
-		} else {
-			throw new EmailCheckerException("Email was not empty");	
+		if (empty($this->getEmail())) {
+			throw new EmailCheckerException("Email was not empty");				
 		}
+		$domain = explode("@", $this->getEmail());				
+		return end($domain);
 	}
 
 	/**
@@ -210,20 +207,19 @@ class EmailChecker
 	 */
 	public function validate()
 	{	
-		if (!empty($this->getEmail())) {
-			$recordMx  = $this->checkDomain();
-			$checkSMTP = $this->checkSMTP($recordMx);
-			$response  = new ResponseChecker();
-			$response
-				->setRecordMx($recordMx)
-				->setIsValid($checkSMTP->isValid())
-				->setMessage($checkSMTP->getMessage())
-				->setCode($checkSMTP->getCode())
-				->setDebug($checkSMTP->getDebug())
-			;
-			return $response; 
-		} else {
+		if (empty($this->getEmail())) {
 			throw new EmailCheckerException("Email was not empty");	
-		}		
+		}	
+		$recordMx  = $this->checkDomain();
+		$checkSMTP = $this->checkSMTP($recordMx);
+		$response  = new ResponseChecker();
+		$response
+			->setRecordMx($recordMx)
+			->setIsValid($checkSMTP->isValid())
+			->setMessage($checkSMTP->getMessage())
+			->setCode($checkSMTP->getCode())
+			->setDebug($checkSMTP->getDebug())
+		;
+		return $response; 	
 	}
 }	
