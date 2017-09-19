@@ -128,7 +128,7 @@ class EmailChecker
     */
 	public function getSender()
 	{
-		return $this->sender;
+		return $this->sender ?: "no-replay@email.com";
 	}
 	
 	/**
