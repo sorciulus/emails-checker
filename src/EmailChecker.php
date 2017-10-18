@@ -17,6 +17,7 @@ use sorciulus\EmailChecker\Exception\MxFunctionException;
 use sorciulus\EmailChecker\MxChecker;
 use sorciulus\EmailChecker\SmtpChecker;
 use sorciulus\EmailChecker\ResponseChecker;
+use sorciulus\EmailChecker\DisponsableChecker;
 
 /**
  * Check Email Class
@@ -43,6 +44,13 @@ class EmailChecker
 	private $timeout = 10;
 
 	/**
+	 * Disponsable Checker
+	 * 
+	 * @var EmailChecker\DisponsableChecker
+	 */
+	private $disponsableService;
+
+	/**
 	 * @param string $email The email address to check
 	 * @param string $sender The email address to set for sender
 	 */
@@ -53,7 +61,9 @@ class EmailChecker
 		}
 		if (!empty($sender)) {
 			$this->setSender($sender);
-		}		
+		}
+
+		$this->disponsableService = new DisponsableChecker();		
 	}
 
 	/**
@@ -156,6 +166,16 @@ class EmailChecker
 		return $this;
     }	
 
+    /**
+    * Gets the Disponsable Checker.
+    *
+    * @return EmailChecker\DisponsableChecker
+    */
+    public function getDisponsableService()
+    {
+        return $this->disponsableService;
+    }
+
 	/**
     * This function extract the mx record from domain
     *
@@ -212,6 +232,13 @@ class EmailChecker
 			->setCode($checkSMTP->getCode())
 			->setDebug($checkSMTP->getDebug())
 		;
+		if ($this->getDisponsableService()->isEnable()) {
+			$response->setIsDisponsable(
+				$this->disponsableService->isDisponsable(
+					$this->getDomain()
+				)
+			);
+		}
 		return $response; 	
 	}
 }	

@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 /*
  * This file is part of EmailChecker.
@@ -63,18 +63,5 @@ class SmtpCheckerTest extends TestCase
             $this->mxChecker,
             "tester@test"
         );
-    }
-
-    public function testSmtpCheckerValidateTrue()
-    {
-        $instance = new SmtpChecker(
-            $this->mxChecker,
-            "sorciulus@gmail.com"
-        );
-        $result = $instance->validate("sorciulus@gmail.com");
-        $this->assertInternalType("boolean", $result->isValid());        
-        $this->assertInternalType("string", $result->getMessage());        
-        $this->assertInternalType("integer", $result->getCode());        
-        $this->assertInternalType("array", $result->getDebug());                                    
     }
 }

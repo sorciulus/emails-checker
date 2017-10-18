@@ -29,7 +29,13 @@ class ResponseChecker
      * Check if email is valid
      * @var boolean
      */
-	private $isValid;
+    private $isValid;
+
+    /**
+     * Check if email is disponsable
+     * @var boolean
+     */
+	private $isDisponsable;
 
     /**
      * Message response from SMTP Server
@@ -93,6 +99,28 @@ class ResponseChecker
 	
 		return $this;
     } 
+    /**
+    * Gets the Check if email is disponsable.
+    *
+    * @return boolean
+    */
+    public function getIsDisponsable()
+    {
+        return $this->isDisponsable;
+    } 
+    /**
+    * Sets the Check if email is disponsable.
+    *
+    * @param boolean $isDisponsable the is disponsable
+    *
+    * @return self
+    */
+    public function setIsDisponsable($isDisponsable)
+    {
+        $this->isDisponsable = $isDisponsable;
+    
+        return $this;
+    }    
     /**
     * Gets the value of message.
     *

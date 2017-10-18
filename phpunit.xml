@@ -10,11 +10,12 @@
          stopOnFailure="true"
          syntaxCheck="true">
     <testsuites>
-        <testsuite name="Email checker Test Suite">
+        <testsuite name="Email checker Test Suite">        
             <file>tests/MxCheckerTest.php</file>
             <file>tests/SmtpCheckerTest.php</file>
             <file>tests/EmailCheckerTest.php</file>           
             <file>tests/ResponseCheckerTest.php</file>           
+            <file>tests/DisponsableCheckerTest.php</file>           
         </testsuite>
     </testsuites>
 </phpunit>

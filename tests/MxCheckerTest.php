@@ -27,7 +27,7 @@ class MxCheckerTest extends TestCase
     }
 
     public function testGetRecordMxTrue()
-    {        
+    {         
         $instance = new MxChecker("gmail.com"); 
         $this->assertInternalType("array", $instance->getRecordMx());
         foreach ($instance->getRecordMx() as $value) {
