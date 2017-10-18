@@ -2,7 +2,7 @@
     "name": "sorciulus/email-checker",
     "type": "library",
     "description": "PHP email validator using SMTP",
-    "keywords": ["php", "email", "smtp", "checker"],    
+    "keywords": ["php", "email", "smtp", "checker", "disponsable"],    
     "license": "MIT",
     "authors": [
         {

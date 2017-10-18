@@ -2,7 +2,7 @@
 
 [![Packagist](https://img.shields.io/badge/packagist-0.2.0-lightgrey.svg)](https://packagist.org/packages/sorciulus/email-checker) ![Build Status](https://travis-ci.org/sorciulus/emails-checker.svg?branch=master) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/sorciulus/emails-checker/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/sorciulus/emails-checker/?branch=master) [![Code Climate](https://codeclimate.com/github/sorciulus/emails-checker/badges/gpa.svg)](https://codeclimate.com/github/sorciulus/emails-checker) [![Issue Count](https://codeclimate.com/github/sorciulus/emails-checker/badges/issue_count.svg)](https://codeclimate.com/github/sorciulus/emails-checker) [![PHP Version](https://img.shields.io/badge/PHP-7.0%2B-blue.svg)](http://php.net/manual/en/migration70.new-features.php) [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE)
 
-PHP library to check if an email exists to SMTP Server. 
+PHP library to check if an email exists to SMTP Server and check if email is Disponsable from https://open.kickbox.io API.
 
 ## Installation
 
@@ -33,6 +33,29 @@ try {
 	echo $ex->getMessage();	
 }
 	
+```
+
+use EmailChecker to check if email is Disponsable:
+
+```php
+<?php
+require_once 'vendor/autoload.php';
+
+use sorciulus\EmailChecker\EmailChecker;
+use sorciulus\EmailChecker\Exception\EmailCheckerException;
+try {
+    $check = new EmailChecker();
+    $disponsibleService = $check->getDisponsableService();  
+    // You can use email or domain
+    if ($disponsibleService->isDisponsable("gucu@asorent.com")) {
+        echo "Email is disponsable";
+    } else {
+        echo "Email not disponsable";
+    }
+} catch (EmailCheckerException $ex) {
+    echo $ex->getMessage(); 
+}
+    
 ```
 
 Loop usage of EmailChecker with setEmail method : 
