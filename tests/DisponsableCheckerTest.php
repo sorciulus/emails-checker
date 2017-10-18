@@ -35,11 +35,9 @@ class DisponsableCheckerTest extends TestCase
 
     public function testApiCall()
     {
-        $client = new Client("https://open.kickbox.io", array(
-            'request.options' => array(
-                'exceptions' => false,
-            )
-        ));
+        $client = new Client([          
+            "base_uri" => "https://open.kickbox.io"
+        ]);
 
         $response = $client->get("/v1/disposable/gmail.com");
         $body = (string)$response->getBody();
